@@ -1,0 +1,82 @@
+{
+  "$schema": "https://www.raycast.com/schemas/extension.json",
+  "name": "organizer",
+  "title": "Organizer",
+  "description": "Manage your company requests - day offs, remote work, and more",
+  "icon": "command-icon.svg",
+  "author": "jakubbaranski",
+  "categories": [
+    "Productivity"
+  ],
+  "license": "MIT",
+"resolutions": {
+    "@types/react": "17.0.14",
+    "@types/react-dom": "17.0.14"
+  },
+  "commands": [
+    {
+      "name": "login",
+      "title": "Login",
+      "description": "Login to your Organizer account",
+      "mode": "view"
+    },
+    {
+      "name": "logout",
+      "title": "Logout",
+      "description": "Logout from your Organizer account",
+      "mode": "no-view"
+    },
+    {
+      "name": "my-requests",
+      "title": "My Requests",
+      "description": "View your employee requests",
+      "mode": "view"
+    },
+    {
+      "name": "create-request",
+      "title": "Create Request",
+      "description": "Create a new employee request (remote work, day off, etc.)",
+      "mode": "view"
+    }
+  ],
+  "preferences": [
+    {
+      "name": "apiUrl",
+      "type": "textfield",
+      "required": false,
+      "title": "API URL",
+      "description": "Base API URL",
+      "default": "https://api.organizer.profil-software.com"
+    }
+  ],
+  "dependencies": {
+    "@raycast/api": "^1.83.2",
+    "@raycast/utils": "^1.17.0",
+    "dayjs": "^1.11.9"
+  },
+  "devDependencies": {
+    "@raycast/eslint-config": "^1.0.11",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.0",
+    "@types/jest": "^30.0.0",
+    "@types/node": "^20.8.10",
+    "@types/react": "^18.3.3",
+    "eslint": "^8.57.0",
+    "jest": "^30.2.0",
+    "prettier": "^3.2.5",
+    "ts-jest": "^29.4.5",
+    "typescript": "^5.4.5"
+  },
+  "scripts": {
+    "build": "ray build -e dist",
+    "dev": "ray develop",
+    "fix-lint": "ray lint --fix",
+    "lint": "ray lint",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "test:verbose": "jest --verbose",
+    "prepublishOnly": "echo \"\\n\\nIt seems like you are trying to publish the Raycast extension to npm.\\n\\nIf you did intend to publish it to npm, remove the \\`prepublishOnly\\` script and rerun \\`npm publish\\` again.\\nIf you wanted to publish it to the Raycast Store instead, use \\`npm run publish\\` instead.\\n\\n\" && exit 1",
+    "publish": "npx @raycast/api@latest publish"
+  }
+}
