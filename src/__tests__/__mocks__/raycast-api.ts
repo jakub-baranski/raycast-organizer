@@ -17,25 +17,21 @@ export const popToRoot = jest.fn();
 
 export const confirmAlert = jest.fn();
 
-export enum Toast {
-  Style = "Style",
-}
+export const Toast = {
+  Style: {
+    Success: "success",
+    Failure: "failure",
+    Animated: "animated",
+  },
+};
 
-Toast.Style = {
-  Success: "success",
-  Failure: "failure",
-  Animated: "animated",
-} as any;
-
-export enum Alert {
-  ActionStyle = "ActionStyle",
-}
-
-Alert.ActionStyle = {
-  Destructive: "destructive",
-  Default: "default",
-  Cancel: "cancel",
-} as any;
+export const Alert = {
+  ActionStyle: {
+    Destructive: "destructive",
+    Default: "default",
+    Cancel: "cancel",
+  },
+};
 
 export const Action = {
   SubmitForm: jest.fn(),

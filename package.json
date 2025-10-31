@@ -9,10 +9,6 @@
     "Productivity"
   ],
   "license": "MIT",
-"resolutions": {
-    "@types/react": "17.0.14",
-    "@types/react-dom": "17.0.14"
-  },
   "commands": [
     {
       "name": "login",
@@ -50,9 +46,9 @@
     }
   ],
   "dependencies": {
-    "@raycast/api": "^1.83.2",
-    "@raycast/utils": "^1.17.0",
-    "dayjs": "^1.11.9"
+    "@raycast/api": "^1.103.5",
+    "@raycast/utils": "^1.19.1",
+    "dayjs": "^1.11.19"
   },
   "devDependencies": {
     "@raycast/eslint-config": "^1.0.11",
@@ -60,7 +56,6 @@
     "@testing-library/react": "^16.3.0",
     "@types/jest": "^30.0.0",
     "@types/node": "^20.8.10",
-    "@types/react": "^18.3.3",
     "eslint": "^8.57.0",
     "jest": "^30.2.0",
     "prettier": "^3.2.5",

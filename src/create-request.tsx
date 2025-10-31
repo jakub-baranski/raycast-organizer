@@ -1,5 +1,5 @@
 import { Action, ActionPanel, Form, showToast, Toast, popToRoot } from "@raycast/api";
-import { useState } from "react";
+import React, { useState } from "react";
 import { ApiClient } from "./services/api";
 import { CreateRequestData, REQUEST_TYPE } from "./types";
 import { ERROR_MESSAGES } from "./constants";
