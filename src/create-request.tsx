@@ -4,14 +4,7 @@ import { ApiClient } from "./services/api";
 import { CreateRequestData, REQUEST_TYPE } from "./types";
 import { ERROR_MESSAGES } from "./constants";
 import dayjs from "dayjs";
-
-const REQUEST_TYPES = [
-  { value: REQUEST_TYPE.REMOTE_WORK, title: "Remote Work" },
-  { value: REQUEST_TYPE.VACATION, title: "Vacation" },
-  { value: REQUEST_TYPE.BUSINESS, title: "Business" },
-  { value: REQUEST_TYPE.VACATION_ON_DEMAND, title: "Vacation on Demand" },
-  { value: REQUEST_TYPE.CUSTOM_TIME, title: "Custom Time" },
-];
+import { REQUEST_TYPES } from "./utils/formatting";
 
 export default function CreateRequestCommand() {
   const [isLoading, setIsLoading] = useState(false);
@@ -86,7 +79,11 @@ export default function CreateRequestCommand() {
     >
       <Form.Dropdown id="requestType" title="Request Type" defaultValue={REQUEST_TYPE.REMOTE_WORK}>
         {REQUEST_TYPES.map((type) => (
-          <Form.Dropdown.Item key={type.value} value={type.value} title={type.title} />
+          <Form.Dropdown.Item 
+            key={type.value} 
+            value={type.value}
+            title={type.title}
+          />
         ))}
       </Form.Dropdown>
 

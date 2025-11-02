@@ -1,4 +1,5 @@
 export const STORAGE_KEYS = {
+  LAST_USED_EMAIL: "last_used_email",
   ACCESS_TOKEN: "access_token",
   REFRESH_TOKEN: "refresh_token",
   ACCESS_EXPIRY: "access_token_expiry",

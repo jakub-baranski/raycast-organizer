@@ -125,6 +125,7 @@ export const REQUEST_STATUS = {
 
 export const REQUEST_TYPE = {
   REMOTE_WORK: "RW",
+  REMOTE_ON_DEMAND: "RD",
   VACATION: "VC",
   BUSINESS: "BS",
   VACATION_ON_DEMAND: "OD",

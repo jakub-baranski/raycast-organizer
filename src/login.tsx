@@ -1,13 +1,27 @@
 import { Action, ActionPanel, Form, showToast, Toast, popToRoot } from "@raycast/api";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ApiClient } from "./services/api";
 import { AuthService } from "./services/auth";
-import { ERROR_MESSAGES } from "./constants";
+import { ERROR_MESSAGES, STORAGE_KEYS } from "./constants/";
+import { LocalStorage } from "@raycast/api";
 
 export default function LoginCommand() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    async function loadLastUsedEmail() {
+      const lastUsedEmail = await LocalStorage.getItem(STORAGE_KEYS.LAST_USED_EMAIL);
+      if (lastUsedEmail) {
+        // Initial render of input element is overriding the default value.
+        setTimeout(() => {
+        setUsername(lastUsedEmail.toString());
+        }, 100)
+      }
+    }
+    loadLastUsedEmail();
+  }, []);
 
   async function handleSubmit() {
     if (!username || !password) {
@@ -24,6 +38,7 @@ export default function LoginCommand() {
     try {
       const apiClient = new ApiClient();
       const response = await apiClient.login(username, password);
+      LocalStorage.setItem(STORAGE_KEYS.LAST_USED_EMAIL, username);
 
       await AuthService.setTokens(
         response.access,

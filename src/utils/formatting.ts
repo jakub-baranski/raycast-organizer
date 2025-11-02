@@ -1,8 +1,5 @@
-import { EmployeeRequest, REQUEST_STATUS } from "../types";
+import { EmployeeRequest, REQUEST_STATUS, REQUEST_TYPE } from "../types";
 
-/**
- * Format date string for display
- */
 export function formatDate(dateString: string): string {
   const date = new Date(dateString);
   return date.toLocaleDateString("en-US", {
@@ -25,9 +22,17 @@ export function getStatusColor(status: string): string {
   return statusColors[status] || "#000000";
 }
 
-/**
- * Get status label
- */
+// TODO: I don't like that...
+export const REQUEST_TYPES = [
+  { value: REQUEST_TYPE.REMOTE_WORK, title: "Remote Work" },
+  { value: REQUEST_TYPE.REMOTE_ON_DEMAND, title: "Remote Work (OD)" },
+  { value: REQUEST_TYPE.VACATION, title: "Vacation" },
+  { value: REQUEST_TYPE.BUSINESS, title: "Business" },
+  { value: REQUEST_TYPE.VACATION_ON_DEMAND, title: "Vacation on Demand" },
+  { value: REQUEST_TYPE.CUSTOM_TIME, title: "Custom Time" },
+];
+
+
 export function getStatusLabel(status: string): string {
   const statusLabels: Record<string, string> = {
     [REQUEST_STATUS.ACCEPTED]: "Accepted",
@@ -38,43 +43,27 @@ export function getStatusLabel(status: string): string {
   return statusLabels[status] || status;
 }
 
-/**
- * Get request type label
- */
 export function getRequestTypeLabel(type: string): string {
-  const typeLabels: Record<string, string> = {
-    VC: "Vacation",
-    DY: "Day Off",
-    RW: "Remote Work",
-    SL: "Sick Leave",
-  };
-  return typeLabels[type] || type;
+  return REQUEST_TYPES.filter((t) => t.value === type)[0]?.title || type;
 }
 
-/**
- * Get icon for request type
- */
 export function getRequestTypeIcon(type: string): string {
   const iconMap: Record<string, string> = {
-    VC: "✈️",
-    DY: "🏖️",
-    RW: "🏠",
-    SL: "🤒",
+    [REQUEST_TYPE.VACATION]: "🏖️",
+    [REQUEST_TYPE.REMOTE_WORK]: "🏠",
+    [REQUEST_TYPE.BUSINESS]: "💼",
+    [REQUEST_TYPE.REMOTE_ON_DEMAND]: "🛋️",
+    [REQUEST_TYPE.VACATION_ON_DEMAND]: "🌴",
+    [REQUEST_TYPE.CUSTOM_TIME]: "⏰",
   };
   return iconMap[type] || "📝";
 }
 
-/**
- * Format request for display
- */
 export function formatRequestTitle(request: EmployeeRequest): string {
   const typeLabel = getRequestTypeLabel(request.requestType);
   return `${getRequestTypeIcon(request.requestType)} ${typeLabel} - ${formatDate(request.startDate)} to ${formatDate(request.endDate)}`;
 }
 
-/**
- * Get subtitle for request
- */
 export function getRequestSubtitle(request: EmployeeRequest): string {
   const statusLabel = getStatusLabel(request.status);
   const projects = request.projects.map((p) => p.name).join(", ");
