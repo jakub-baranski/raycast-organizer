@@ -119,8 +119,8 @@ export interface Preferences {
 export const REQUEST_STATUS = {
   ACCEPTED: "AC",
   PENDING: "PD",
-  REJECTED: "RE",
-  CANCELLED: "CA",
+  DECLINED: "DC",
+  CANCELLED: "CD",
 } as const;
 
 export const REQUEST_TYPE = {

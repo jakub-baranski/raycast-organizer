@@ -16,7 +16,7 @@ export function getStatusColor(status: string): string {
   const statusColors: Record<string, string> = {
     [REQUEST_STATUS.ACCEPTED]: "#00FF00",
     [REQUEST_STATUS.PENDING]: "#FFA500",
-    [REQUEST_STATUS.REJECTED]: "#FF0000",
+    [REQUEST_STATUS.DECLINED]: "#FF0000",
     [REQUEST_STATUS.CANCELLED]: "#808080",
   };
   return statusColors[status] || "#000000";
@@ -37,7 +37,7 @@ export function getStatusLabel(status: string): string {
   const statusLabels: Record<string, string> = {
     [REQUEST_STATUS.ACCEPTED]: "Accepted",
     [REQUEST_STATUS.PENDING]: "Pending",
-    [REQUEST_STATUS.REJECTED]: "Rejected",
+    [REQUEST_STATUS.DECLINED]: "Declined",
     [REQUEST_STATUS.CANCELLED]: "Cancelled",
   };
   return statusLabels[status] || status;
@@ -66,6 +66,5 @@ export function formatRequestTitle(request: EmployeeRequest): string {
 
 export function getRequestSubtitle(request: EmployeeRequest): string {
   const statusLabel = getStatusLabel(request.status);
-  const projects = request.projects.map((p) => p.name).join(", ");
-  return `Status: ${statusLabel}${projects ? ` | Projects: ${projects}` : ""}`;
+  return `Status: ${statusLabel}`;
 }

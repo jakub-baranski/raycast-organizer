@@ -37,7 +37,8 @@ export class ApiClient {
       throw new Error(ERROR_MESSAGES.AUTH_REQUIRED);
     }
 
-    const url = `${this.baseUrl}/rest-auth/refresh/`;
+    const url = `${this.baseUrl}${API_ENDPOINTS.REFRESH}`;
+
     const response = await fetch(url, {
       method: "POST",
       headers: {

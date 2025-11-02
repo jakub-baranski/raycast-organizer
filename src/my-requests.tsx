@@ -1,7 +1,7 @@
 import { Action, ActionPanel, List, showToast, Toast, Icon, Color } from "@raycast/api";
 import React, { useEffect, useState } from "react";
 import { ApiClient } from "./services/api";
-import { EmployeeRequest, REQUEST_STATUS } from "./types";
+import { EmployeeRequest, REQUEST_STATUS, RequestWarning } from "./types";
 import { formatDate, formatRequestTitle, getRequestSubtitle, getStatusLabel } from "./utils/formatting";
 import { ERROR_MESSAGES } from "./constants";
 
@@ -14,6 +14,7 @@ export default function MyRequestsCommand() {
   }, []);
 
   async function fetchRequests() {
+    console.log("Fetching requests...");
     setIsLoading(true);
 
     try {
@@ -61,7 +62,7 @@ export default function MyRequestsCommand() {
     const statusMap: Record<string, Icon> = {
       [REQUEST_STATUS.ACCEPTED]: Icon.CheckCircle,
       [REQUEST_STATUS.PENDING]: Icon.Clock,
-      [REQUEST_STATUS.REJECTED]: Icon.XMarkCircle,
+      [REQUEST_STATUS.DECLINED]: Icon.XMarkCircle,
       [REQUEST_STATUS.CANCELLED]: Icon.MinusCircle,
     };
     return statusMap[status] || Icon.Circle;
@@ -71,16 +72,23 @@ export default function MyRequestsCommand() {
     const colorMap: Record<string, Color> = {
       [REQUEST_STATUS.ACCEPTED]: Color.Green,
       [REQUEST_STATUS.PENDING]: Color.Orange,
-      [REQUEST_STATUS.REJECTED]: Color.Red,
+      [REQUEST_STATUS.DECLINED]: Color.Red,
       [REQUEST_STATUS.CANCELLED]: Color.SecondaryText,
     };
     return colorMap[status] || Color.PrimaryText;
   }
 
   return (
-    <List isLoading={isLoading} searchBarPlaceholder="Search requests...">
+    <List 
+      isLoading={isLoading} 
+      searchBarPlaceholder="Search requests..."
+    >
       {requests.length === 0 && !isLoading ? (
-        <List.EmptyView icon={Icon.Document} title="No Requests Found" description="You don't have any requests yet" />
+        <List.EmptyView 
+          icon={Icon.Document} 
+          title="No Requests Found" 
+          description="You don't have any requests yet" 
+        />
       ) : (
         requests.map((request) => (
           <List.Item
@@ -88,10 +96,21 @@ export default function MyRequestsCommand() {
             icon={{ source: getStatusIcon(request.status), tintColor: getStatusColor(request.status) }}
             title={formatRequestTitle(request)}
             subtitle={getRequestSubtitle(request)}
-            accessories={[{ text: formatDate(request.created) }]}
+            accessories={[
+                { 
+                  icon: request.warnings.length > 0 ? 
+                  {source: Icon.Warning, tintColor: Color.Orange }:
+                  undefined
+                },
+                { text: formatDate(request.created) }, 
+              ]}
             actions={
               <ActionPanel>
-                <Action.Push title="View Details" icon={Icon.Eye} target={<RequestDetails request={request} />} />
+                <Action.Push 
+                    title="View Details" 
+                    icon={Icon.Eye} 
+                    target={<RequestDetails request={request} />}
+                  />
                 {request.status === REQUEST_STATUS.PENDING && (
                   <Action
                     title="Cancel Request"
@@ -110,7 +129,11 @@ export default function MyRequestsCommand() {
   );
 }
 
+
 function RequestDetails({ request }: { request: EmployeeRequest }) {
+  const formatWarning = (w: RequestWarning) => 
+  w.project?.trim() ? `${w.warningType} — ${w.project}` : w.warningType;
+
   return (
     <List>
       <List.Item title="Status" subtitle={getStatusLabel(request.status)} />
@@ -125,6 +148,16 @@ function RequestDetails({ request }: { request: EmployeeRequest }) {
       {request.projects.length > 0 && (
         <List.Item title="Projects" subtitle={request.projects.map((p) => p.name).join(", ")} />
       )}
+
+      {request.warnings.length > 0 && (
+        <List.Item
+          title="Warnings"
+          subtitle={request.warnings
+            .map(formatWarning)
+            .join("; ")}
+        />
+      )}
     </List>
   );
 }
+

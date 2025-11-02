@@ -82,8 +82,7 @@ export default function CreateRequestCommand() {
           <Form.Dropdown.Item 
             key={type.value} 
             value={type.value}
-            title={type.title}
-          />
+            title={type.title} />
         ))}
       </Form.Dropdown>
 

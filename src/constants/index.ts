@@ -17,7 +17,7 @@ export const ERROR_MESSAGES = {
 
 export const API_ENDPOINTS = {
   LOGIN: "/rest-auth/login/",
-  REFRESH: "/rest-auth/refresh/",
+  REFRESH: "/rest-auth/token/refresh/",
   MY_REQUESTS: "/calendar/employee-requests/my/",
   EMPLOYEE_REQUESTS: "/calendar/employee-requests/",
   CANCEL_REQUEST: (id: number) => `/calendar/employee-requests/${id}/cancel-request/`,

@@ -7,7 +7,7 @@ import {
   formatRequestTitle,
   getRequestSubtitle,
 } from "../../utils/formatting";
-import { REQUEST_STATUS } from "../../types";
+import { REQUEST_STATUS, REQUEST_TYPE } from "../../types";
 import type { EmployeeRequest } from "../../types";
 
 describe("Formatting Utils", () => {
@@ -36,8 +36,8 @@ describe("Formatting Utils", () => {
       expect(getStatusColor(REQUEST_STATUS.PENDING)).toBe("#FFA500");
     });
 
-    it("should return correct color for rejected status", () => {
-      expect(getStatusColor(REQUEST_STATUS.REJECTED)).toBe("#FF0000");
+    it("should return correct color for declined status", () => {
+      expect(getStatusColor(REQUEST_STATUS.DECLINED)).toBe("#FF0000");
     });
 
     it("should return correct color for cancelled status", () => {
@@ -58,8 +58,8 @@ describe("Formatting Utils", () => {
       expect(getStatusLabel(REQUEST_STATUS.PENDING)).toBe("Pending");
     });
 
-    it("should return correct label for rejected status", () => {
-      expect(getStatusLabel(REQUEST_STATUS.REJECTED)).toBe("Rejected");
+    it("should return correct label for declined status", () => {
+      expect(getStatusLabel(REQUEST_STATUS.DECLINED)).toBe("Declined");
     });
 
     it("should return correct label for cancelled status", () => {
@@ -73,20 +73,14 @@ describe("Formatting Utils", () => {
 
   describe("getRequestTypeLabel", () => {
     it("should return correct label for vacation", () => {
-      expect(getRequestTypeLabel("VC")).toBe("Vacation");
+      expect(getRequestTypeLabel(REQUEST_TYPE.VACATION)).toBe("Vacation");
     });
 
-    it("should return correct label for day off", () => {
-      expect(getRequestTypeLabel("DY")).toBe("Day Off");
-    });
 
     it("should return correct label for remote work", () => {
-      expect(getRequestTypeLabel("RW")).toBe("Remote Work");
+      expect(getRequestTypeLabel(REQUEST_TYPE.REMOTE_WORK)).toBe("Remote Work");
     });
 
-    it("should return correct label for sick leave", () => {
-      expect(getRequestTypeLabel("SL")).toBe("Sick Leave");
-    });
 
     it("should return type as-is for unknown type", () => {
       expect(getRequestTypeLabel("UNKNOWN")).toBe("UNKNOWN");
@@ -95,20 +89,13 @@ describe("Formatting Utils", () => {
 
   describe("getRequestTypeIcon", () => {
     it("should return correct icon for vacation", () => {
-      expect(getRequestTypeIcon("VC")).toBe("✈️");
-    });
-
-    it("should return correct icon for day off", () => {
-      expect(getRequestTypeIcon("DY")).toBe("🏖️");
+      expect(getRequestTypeIcon(REQUEST_TYPE.VACATION)).toBe("🏖️");
     });
 
     it("should return correct icon for remote work", () => {
-      expect(getRequestTypeIcon("RW")).toBe("🏠");
+      expect(getRequestTypeIcon(REQUEST_TYPE.REMOTE_WORK)).toBe("🏠");
     });
 
-    it("should return correct icon for sick leave", () => {
-      expect(getRequestTypeIcon("SL")).toBe("🤒");
-    });
 
     it("should return default icon for unknown type", () => {
       expect(getRequestTypeIcon("UNKNOWN")).toBe("📝");
@@ -137,7 +124,7 @@ describe("Formatting Utils", () => {
 
       const title = formatRequestTitle(request);
 
-      expect(title).toContain("✈️");
+      expect(title).toContain("🏖️ ");
       expect(title).toContain("Vacation");
       expect(title).toMatch(/Jan.*1.*2024/);
       expect(title).toMatch(/Jan.*5.*2024/);
@@ -145,7 +132,7 @@ describe("Formatting Utils", () => {
   });
 
   describe("getRequestSubtitle", () => {
-    it("should format subtitle with status and projects", () => {
+    it("should format subtitle with status", () => {
       const request: EmployeeRequest = {
         id: 1,
         requestType: "VC",
@@ -169,7 +156,7 @@ describe("Formatting Utils", () => {
 
       const subtitle = getRequestSubtitle(request);
 
-      expect(subtitle).toBe("Status: Pending | Projects: Project A, Project B");
+      expect(subtitle).toBe("Status: Pending");
     });
 
     it("should format subtitle without projects", () => {

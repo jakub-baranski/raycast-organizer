@@ -6,6 +6,7 @@
 2. Run `npm install` to install dependencies
 3. Run `npm run dev` to start development
 
+
 ## Configuration
 
 The extension uses the following preferences:

@@ -2,9 +2,6 @@ import { LocalStorage } from "@raycast/api";
 import { STORAGE_KEYS } from "../constants";
 
 export class AuthService {
-  /**
-   * Store authentication tokens and user data from login response
-   */
   static async setTokens(
     accessToken: string,
     refreshToken: string,
@@ -21,9 +18,6 @@ export class AuthService {
     }
   }
 
-  /**
-   * Get access token, checking if it's expired
-   */
   static async getAccessToken(): Promise<string | undefined> {
     const token = await LocalStorage.getItem<string>(STORAGE_KEYS.ACCESS_TOKEN);
     if (!token) {
@@ -45,9 +39,6 @@ export class AuthService {
     return token;
   }
 
-  /**
-   * Get refresh token
-   */
   static async getRefreshToken(): Promise<string | undefined> {
     const token = await LocalStorage.getItem<string>(STORAGE_KEYS.REFRESH_TOKEN);
     if (!token) {
@@ -67,9 +58,6 @@ export class AuthService {
     return token;
   }
 
-  /**
-   * Get user data
-   */
   static async getUserData(): Promise<unknown | undefined> {
     const userData = await LocalStorage.getItem<string>(STORAGE_KEYS.USER_DATA);
     if (!userData) {
@@ -82,9 +70,6 @@ export class AuthService {
     }
   }
 
-  /**
-   * Clear all authentication data
-   */
   static async clearTokens(): Promise<void> {
     await LocalStorage.removeItem(STORAGE_KEYS.ACCESS_TOKEN);
     await LocalStorage.removeItem(STORAGE_KEYS.REFRESH_TOKEN);
