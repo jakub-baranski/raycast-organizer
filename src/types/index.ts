@@ -6,8 +6,13 @@ export interface Employee {
 }
 
 export interface Project {
+  id: number;
   name: string;
   color: string;
+  isCommercial: boolean;
+  tags: string[];
+  channelId: string | null;
+
 }
 
 export interface EmployeeRequest {
@@ -48,6 +53,16 @@ export interface CreateRequestData {
   endTime?: string | null;
   breaks?: Array<{ start: string; end: string }>;
   note?: string;
+}
+
+export interface TimeLogEntry {
+  id?: number;
+  description: string;
+  customTaskTitle?: string;
+  startAt: string;
+  finishAt: string;  
+  isOvertime: boolean;
+  project: number;
 }
 
 export interface PaginatedResponse<T> {

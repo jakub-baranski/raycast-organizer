@@ -1,5 +1,6 @@
 export const STORAGE_KEYS = {
   LAST_USED_EMAIL: "last_used_email",
+  LAST_LOG_DATA: "last_log_data",
   ACCESS_TOKEN: "access_token",
   REFRESH_TOKEN: "refresh_token",
   ACCESS_EXPIRY: "access_token_expiry",
@@ -20,6 +21,9 @@ export const API_ENDPOINTS = {
   REFRESH: "/rest-auth/token/refresh/",
   MY_REQUESTS: "/calendar/employee-requests/my/",
   EMPLOYEE_REQUESTS: "/calendar/employee-requests/",
+  PROJECTS: "/projects/my/",
+  WORKTIME: "/projects/my-worktime/",
+  WORKTIME_ENTRY: (id: number) => `/projects/my-worktime/${id}/`,
   CANCEL_REQUEST: (id: number) => `/calendar/employee-requests/${id}/cancel-request/`,
 } as const;
 

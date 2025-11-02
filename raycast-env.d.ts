@@ -24,6 +24,10 @@ declare namespace Preferences {
   export type MyRequests = ExtensionPreferences & {}
   /** Preferences accessible in the `create-request` command */
   export type CreateRequest = ExtensionPreferences & {}
+  /** Preferences accessible in the `log-time` command */
+  export type LogTime = ExtensionPreferences & {}
+  /** Preferences accessible in the `view-time-logs` command */
+  export type ViewTimeLogs = ExtensionPreferences & {}
 }
 
 declare namespace Arguments {
@@ -35,5 +39,9 @@ declare namespace Arguments {
   export type MyRequests = {}
   /** Arguments passed to the `create-request` command */
   export type CreateRequest = {}
+  /** Arguments passed to the `log-time` command */
+  export type LogTime = {}
+  /** Arguments passed to the `view-time-logs` command */
+  export type ViewTimeLogs = {}
 }
 

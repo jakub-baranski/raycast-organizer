@@ -1,6 +1,6 @@
 import { getPreferenceValues } from "@raycast/api";
 import { AuthService } from "./auth";
-import { Preferences, EmployeeRequest, PaginatedResponse, LoginResponse, CreateRequestData } from "../types";
+import { Preferences, EmployeeRequest, PaginatedResponse, LoginResponse, CreateRequestData, TimeLogEntry, Project, TimeLogEntry } from "../types";
 import { API_ENDPOINTS, HTTP_STATUS, ERROR_MESSAGES } from "../constants";
 
 export class ApiClient {
@@ -167,12 +167,36 @@ export class ApiClient {
     return this.request<EmployeeRequest>(API_ENDPOINTS.EMPLOYEE_REQUESTS, {
       method: "POST",
       body: JSON.stringify(data),
-    });
+    }); 
   }
 
   async cancelRequest(requestId: number): Promise<void> {
     await this.request<void>(API_ENDPOINTS.CANCEL_REQUEST(requestId), {
       method: "POST",
+    });
+  }
+
+  async getProjects(): Promise<PaginatedResponse<Project>> {
+    return this.request<PaginatedResponse<Project>>(API_ENDPOINTS.PROJECTS);
+  }
+
+  async logTime(data: TimeLogEntry): Promise<TimeLogEntry> {
+
+    return await this.request<TimeLogEntry>(API_ENDPOINTS.WORKTIME, {
+      method: "POST",
+      body: JSON.stringify(data),
+    });
+  }
+
+
+  async getTimeLogEntries(startDate: string, endDate: string): Promise<TimeLogEntry[]> {
+    const url = `${API_ENDPOINTS.WORKTIME}?start_date=${startDate}&end_date=${endDate}`;
+    return this.request<TimeLogEntry[]>(url);
+  }
+
+  async deleteTimeLogEntry(entryId: number): Promise<void> {
+    await this.request<void>(API_ENDPOINTS.WORKTIME_ENTRY(entryId), {
+      method: "DELETE",
     });
   }
 }
