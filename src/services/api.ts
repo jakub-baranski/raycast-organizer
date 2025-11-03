@@ -1,6 +1,14 @@
 import { getPreferenceValues } from "@raycast/api";
 import { AuthService } from "./auth";
-import { Preferences, EmployeeRequest, PaginatedResponse, LoginResponse, CreateRequestData, TimeLogEntry, Project, TimeLogEntry } from "../types";
+import { 
+  Preferences,
+  EmployeeRequest,
+  PaginatedResponse,
+  LoginResponse,
+  CreateRequestData,
+  Project,
+  TimeLogEntry 
+} from "../types";
 import { API_ENDPOINTS, HTTP_STATUS, ERROR_MESSAGES } from "../constants";
 
 export class ApiClient {
@@ -10,7 +18,7 @@ export class ApiClient {
 
   constructor() {
     const preferences = getPreferenceValues<Preferences>();
-    this.baseUrl = preferences.apiUrl || "https://api.organizer.profil-software.com";
+    this.baseUrl = preferences.apiUrl;
   }
 
   private async refreshAccessToken(): Promise<string> {

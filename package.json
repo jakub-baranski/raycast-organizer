@@ -53,8 +53,7 @@
       "type": "textfield",
       "required": false,
       "title": "API URL",
-      "description": "Base API URL",
-      "default": "https://api.organizer.profil-software.com"
+      "description": "Base API URL"
     }
   ],
   "dependencies": {

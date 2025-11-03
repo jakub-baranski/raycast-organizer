@@ -9,7 +9,7 @@
 
 type ExtensionPreferences = {
   /** API URL - Base API URL */
-  "apiUrl": string
+  "apiUrl"?: string
 }
 
 /** Preferences accessible in all the extension's commands */

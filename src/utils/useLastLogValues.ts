@@ -2,6 +2,11 @@ import { LocalStorage } from "@raycast/api";
 import { TimeLogEntry } from "../types";
 import { STORAGE_KEYS } from "../constants";
 
+
+/**
+ * Get or update the last time log values for a specific project from local storage.
+ * Allows for pre-filling time log forms with previously used values.
+ */
 export const useLastTimeLogValues = () => {
 
 const getLastTimeLogValues = async (project: number): Promise<TimeLogEntry | undefined> => {

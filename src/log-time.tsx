@@ -74,7 +74,7 @@ export default function LogTimeCommand() {
   });
 
   useEffect(() => {
-  // Get projects and set to state for dropdown
+    // Get projects and set to state for dropdown.
     setIsLoading(true);
     const apiClient = new ApiClient();
     const fetchProjects = async () => {
