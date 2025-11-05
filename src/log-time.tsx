@@ -38,8 +38,8 @@ export default function LogTimeCommand() {
       const apiClient = new ApiClient();
 
     try {
-      const startAtDate = `${dayjs(values.date).format('YYYY-MM-DD')}T${values.startAt}` 
-      const finishAtDate = `${dayjs(values.date).format('YYYY-MM-DD')}T${values.finishAt}`
+      const startAtDate = `${dayjs(values.date).format('YYYY-MM-DD')}T${values.startAt}Z` 
+      const finishAtDate = `${dayjs(values.date).format('YYYY-MM-DD')}T${values.finishAt}Z`;
 
       const requestData: TimeLogEntry = {
         project: parseInt(values.project),
