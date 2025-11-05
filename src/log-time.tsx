@@ -8,6 +8,9 @@ import { ERROR_MESSAGES } from "./constants";
 import { useLastTimeLogValues } from "./utils/useLastLogValues";
 import { useForm } from "@raycast/utils";
 
+import utc from 'dayjs/plugin/utc';
+dayjs.extend(utc);
+
 interface LogTimeFormValues {
   project: string;
   date: Date;
@@ -38,13 +41,17 @@ export default function LogTimeCommand() {
       const apiClient = new ApiClient();
 
     try {
-      const startAtDate = `${dayjs(values.date).format('YYYY-MM-DD')}T${values.startAt}Z` 
-      const finishAtDate = `${dayjs(values.date).format('YYYY-MM-DD')}T${values.finishAt}Z`;
+      const startAtDate = `${dayjs(values.date).format('YYYY-MM-DD')}T${values.startAt}` 
+      const finishAtDate = `${dayjs(values.date).format('YYYY-MM-DD')}T${values.finishAt}`;
+
+      // times are in local time - we need to send in UTC
+      const utc_startAtDate = dayjs(startAtDate).utc().format();
+      const utc_finishAtDate = dayjs(finishAtDate).utc().format();
 
       const requestData: TimeLogEntry = {
         project: parseInt(values.project),
-        startAt: startAtDate,
-        finishAt: finishAtDate,
+        startAt: utc_startAtDate,
+        finishAt: utc_finishAtDate,
         isOvertime: values.isOvertime,
         description: values.description,
       };
@@ -81,20 +88,20 @@ export default function LogTimeCommand() {
       const response = await apiClient.getProjects();
       setProjects(response.results);
       
-      if (response.results.length > 0 && !formInitialized.current) {
-        const firstProject = response.results[0];
-        const lastValues = await getLastTimeLogValues(firstProject.id);
-        
-        if (lastValues) {
-          setValue("project", firstProject.id.toString());
-          setValue("date", new Date(lastValues.startAt.split('T')[0]));
-          setValue("startAt", lastValues.startAt.split('T')[1]);
-          setValue("finishAt", lastValues.finishAt.split('T')[1]);
-          setValue("isOvertime", lastValues.isOvertime);
-        }
-        
-        formInitialized.current = true;
-      }
+      // if (response.results.length > 0 && !formInitialized.current) {
+      //   const firstProject = response.results[0];
+      //   const lastValues = await getLastTimeLogValues(firstProject.id);
+      //
+      //   if (lastValues) {
+      //     setValue("project", firstProject.id.toString());
+      //     setValue("date", new Date(lastValues.startAt.split('T')[0]));
+      //     setValue("startAt", lastValues.startAt.split('T')[1]);
+      //     setValue("finishAt", lastValues.finishAt.split('T')[1]);
+      //     setValue("isOvertime", lastValues.isOvertime);
+      //   }
+      //
+      //   formInitialized.current = true;
+      // }
       setIsLoading(false);
     };
     fetchProjects();
@@ -112,7 +119,6 @@ export default function LogTimeCommand() {
       const lastValues = await getLastTimeLogValues(parseInt(projectId));
       
       if (lastValues) {
-        setValue("date", new Date(lastValues.startAt.split('T')[0]));
         setValue("startAt", lastValues.startAt.split('T')[1]);
         setValue("finishAt", lastValues.finishAt.split('T')[1]);
         setValue("isOvertime", lastValues.isOvertime);

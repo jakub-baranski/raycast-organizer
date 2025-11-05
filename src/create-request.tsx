@@ -27,12 +27,16 @@ export default function CreateRequestCommand() {
       const startDate = dayjs(values.startDate).format("YYYY-MM-DD");
       const endDate = dayjs(values.endDate).format("YYYY-MM-DD");
 
+      // times are in local time - we need to send in UTC
+      const utc_startDate = dayjs(startDate).utc().format();
+      const utc_finishDate = dayjs(endDate).utc().format();
+
       const requestData: CreateRequestData = {
         requestType: values.requestType,
         startDate,
         endDate,
-        startTime: values.startTime ? `${startDate}T${values.startTime}Z` : null,
-        endTime: values.endTime ? `${endDate}T${values.endTime}Z` : null,
+        startTime: values.startTime ? `${utc_startDate}T${values.startTime}Z` : null,
+        endTime: values.endTime ? `${utc_finishDate}T${values.endTime}Z` : null,
       };
 
       if (values.breakStart && values.breakEnd) {
