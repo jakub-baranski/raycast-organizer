@@ -20,7 +20,11 @@ interface LogTimeFormValues {
   description: string;
 }
 
-export default function LogTimeCommand() {
+interface LogTimeCommandProps {
+  prefillEntry?: Partial<TimeLogEntry>;
+}
+
+export default function LogTimeCommand({ prefillEntry }: LogTimeCommandProps) {
 
   const [isLoading, setIsLoading] = useState(false);
   const [projects, setProjects] = useState<Project[]>([]); 
@@ -88,6 +92,7 @@ export default function LogTimeCommand() {
       const response = await apiClient.getProjects();
       setProjects(response.results);
       setIsLoading(false);
+      formInitialized.current = true;
     };
     fetchProjects();
   }, []);
@@ -95,19 +100,12 @@ export default function LogTimeCommand() {
   const handleProjectChange = async (projectId: string) => {
     setValue("project", projectId);
     
-    const hasUserEnteredData = 
-      values.startAt || 
-      values.finishAt || 
-      values.description;
-    
-    if (!hasUserEnteredData) {
+    if (!prefillEntry && formInitialized.current) {
       const lastValues = await getLastTimeLogValues(parseInt(projectId));
+
       
       if (lastValues) {
         // We send values in UTC, but we want to show in local time
-        // setValue("startAt", lastValues.startAt.split('T')[1]);
-        // setValue("finishAt", lastValues.finishAt.split('T')[1]);
-        //
         const localStartAt = dayjs(lastValues.startAt).local().format('HH:mm');
         const localFinishAt = dayjs(lastValues.finishAt).local().format('HH:mm');
         
@@ -115,6 +113,27 @@ export default function LogTimeCommand() {
         setValue("finishAt", localFinishAt);
         setValue("isOvertime", lastValues.isOvertime);
         setValue("description", lastValues.description || "" );
+      }
+    } else if (prefillEntry) {
+      // If prefillEntry is provided, use its values to prefill the form.
+      // It's used for copying an existing entry.
+      //
+      if (prefillEntry.project) {
+        setValue("project", prefillEntry.project.toString());
+      }
+      if (prefillEntry.startAt) {
+        const localStartAt = dayjs(prefillEntry.startAt).local().format('HH:mm');
+        setValue("startAt", localStartAt);
+      }
+      if (prefillEntry.finishAt) {
+        const localFinishAt = dayjs(prefillEntry.finishAt).local().format('HH:mm');
+        setValue("finishAt", localFinishAt);
+      }
+      if (prefillEntry.isOvertime !== undefined) {
+        setValue("isOvertime", prefillEntry.isOvertime);
+      }
+      if (prefillEntry.description) {
+        setValue("description", prefillEntry.description);
       }
     }
   };

@@ -1,9 +1,10 @@
-import { Action, ActionPanel, List, Icon, Color, confirmAlert, Alert, showToast, Toast } from "@raycast/api";
+import { Action, ActionPanel, List, Icon, Color, confirmAlert, Alert, showToast, Toast, useNavigation } from "@raycast/api";
 import React, { useEffect, useState } from "react";
 import { ApiClient } from "./services/api";
 import { TimeLogEntry, Project } from "./types";
 import dayjs from "dayjs";
 import { ERROR_MESSAGES } from "./constants";
+import LogTimeCommand from "./log-time";
 
 interface GroupedEntries {
   [date: string]: TimeLogEntry[];
@@ -15,6 +16,9 @@ export default function ViewTimeLogsCommand() {
   const [projects, setProjects] = useState<Project[]>([]);
   const [startDate, setStartDate] = useState<Date>(dayjs().subtract(7, "days").toDate());
   const [endDate, setEndDate] = useState<Date>(new Date());
+
+
+const { push } = useNavigation();
 
   const fetchData = async () => {
     setIsLoading(true);
@@ -207,6 +211,19 @@ export default function ViewTimeLogsCommand() {
                           onAction={() => handleDelete(entry.id!)}
                           shortcut={{ modifiers: ["cmd"], key: "d" }}
                         />
+                          <Action
+                            title="Copy Entry"
+                            icon={Icon.Duplicate}
+                            shortcut={{ modifiers: ["cmd"], key: "c" }}
+                            onAction={async () => {
+                              push(
+                                <LogTimeCommand
+                                  prefillEntry={entry}
+
+                                />
+                              )
+                            }}
+                          />  
                         <Action
                           title="Refresh"
                           icon={Icon.ArrowClockwise}
