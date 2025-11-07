@@ -87,21 +87,6 @@ export default function LogTimeCommand() {
     const fetchProjects = async () => {
       const response = await apiClient.getProjects();
       setProjects(response.results);
-      
-      // if (response.results.length > 0 && !formInitialized.current) {
-      //   const firstProject = response.results[0];
-      //   const lastValues = await getLastTimeLogValues(firstProject.id);
-      //
-      //   if (lastValues) {
-      //     setValue("project", firstProject.id.toString());
-      //     setValue("date", new Date(lastValues.startAt.split('T')[0]));
-      //     setValue("startAt", lastValues.startAt.split('T')[1]);
-      //     setValue("finishAt", lastValues.finishAt.split('T')[1]);
-      //     setValue("isOvertime", lastValues.isOvertime);
-      //   }
-      //
-      //   formInitialized.current = true;
-      // }
       setIsLoading(false);
     };
     fetchProjects();
@@ -119,9 +104,17 @@ export default function LogTimeCommand() {
       const lastValues = await getLastTimeLogValues(parseInt(projectId));
       
       if (lastValues) {
-        setValue("startAt", lastValues.startAt.split('T')[1]);
-        setValue("finishAt", lastValues.finishAt.split('T')[1]);
+        // We send values in UTC, but we want to show in local time
+        // setValue("startAt", lastValues.startAt.split('T')[1]);
+        // setValue("finishAt", lastValues.finishAt.split('T')[1]);
+        //
+        const localStartAt = dayjs(lastValues.startAt).local().format('HH:mm');
+        const localFinishAt = dayjs(lastValues.finishAt).local().format('HH:mm');
+        
+        setValue("startAt", localStartAt);
+        setValue("finishAt", localFinishAt);
         setValue("isOvertime", lastValues.isOvertime);
+        setValue("description", lastValues.description || "" );
       }
     }
   };
