@@ -54,6 +54,14 @@
       "required": false,
       "title": "API URL",
       "description": "Base API URL"
+    },
+    {
+      "name": "useDrafts",
+      "type": "checkbox",
+      "required": false,
+      "title": "Use Drafts",
+      "description": "Enable drafts for forms",
+      "default": true
     }
   ],
   "dependencies": {

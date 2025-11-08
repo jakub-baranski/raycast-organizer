@@ -129,6 +129,7 @@ export interface NotificationRefuse {
 
 export interface Preferences {
   apiUrl: string;
+  useDrafts: boolean;
 }
 
 export const REQUEST_STATUS = {

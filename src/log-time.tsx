@@ -1,7 +1,7 @@
-import { Action, ActionPanel, Form, popToRoot, showToast, Toast } from "@raycast/api";
+import { Action, ActionPanel, Form, getPreferenceValues, popToRoot, showToast, Toast } from "@raycast/api";
 import React, { useEffect, useRef } from "react";
 import { useState } from "react";
-import { TimeLogEntry, Project } from "./types";
+import { TimeLogEntry, Project, Preferences } from "./types";
 import { ApiClient } from "./services/api";
 import dayjs from "dayjs";
 import { ERROR_MESSAGES } from "./constants";
@@ -25,22 +25,25 @@ interface LogTimeCommandProps {
   prefillEntry?: Partial<TimeLogEntry>;
 }
 
-export default function LogTimeCommand({ prefillEntry }: LogTimeCommandProps) {
+export default function LogTimeCommand({ prefillEntry, draftValues }: LogTimeCommandProps) {
 
   const [isLoading, setIsLoading] = useState(false);
   const [projects, setProjects] = useState<Project[]>([]); 
   const formInitialized = useRef(false);
 
+
+  const preferences = getPreferenceValues<Preferences>();
+
   const { getLastTimeLogValues, updateLastTimeLogValues } = useLastTimeLogValues();
 
   const { handleSubmit, itemProps, values, setValue } = useForm<LogTimeFormValues>({
     initialValues: {
-      project: "",
+      project: draftValues?.project ? draftValues.project.toString() : "",
       date: new Date(),
-      startAt: "",
-      finishAt: "",
-      isOvertime: false,
-      description: "",
+      startAt: draftValues?.startAt || "",
+      finishAt: draftValues?.finishAt || "",
+      isOvertime: draftValues?.isOvertime || false,
+      description: draftValues?.description || "",
     },
     onSubmit: async (values) => {
       const apiClient = new ApiClient();
@@ -148,6 +151,7 @@ export default function LogTimeCommand({ prefillEntry }: LogTimeCommandProps) {
 
   return (
     <Form
+      enableDrafts={ preferences.useDrafts }
       isLoading={isLoading}
       actions={
         <ActionPanel>

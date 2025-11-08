@@ -9,7 +9,9 @@
 
 type ExtensionPreferences = {
   /** API URL - Base API URL */
-  "apiUrl"?: string
+  "apiUrl"?: string,
+  /** Use Drafts - Enable drafts for forms */
+  "useDrafts": boolean
 }
 
 /** Preferences accessible in all the extension's commands */
