@@ -24,12 +24,13 @@ export function getStatusColor(status: string): string {
 
 // TODO: I don't like that...
 export const REQUEST_TYPES = [
-  { value: REQUEST_TYPE.REMOTE_WORK, title: "Remote Work" },
-  { value: REQUEST_TYPE.REMOTE_ON_DEMAND, title: "Remote Work (OD)" },
-  { value: REQUEST_TYPE.VACATION, title: "Vacation" },
-  { value: REQUEST_TYPE.BUSINESS, title: "Business" },
-  { value: REQUEST_TYPE.VACATION_ON_DEMAND, title: "Vacation on Demand" },
-  { value: REQUEST_TYPE.CUSTOM_TIME, title: "Custom Time" },
+  { value: REQUEST_TYPE.REMOTE_WORK, title: "Remote Work", canBeSelected: true },
+  { value: REQUEST_TYPE.REMOTE_ON_DEMAND, title: "Remote Work (OD)", canBeSelected: false },
+  { value: REQUEST_TYPE.VACATION, title: "Vacation", canBeSelected: true },
+  { value: REQUEST_TYPE.BUSINESS, title: "Business", canBeSelected: true },
+  { value: REQUEST_TYPE.VACATION_ON_DEMAND, title: "Vacation on Demand", canBeSelected: false },
+  { value: REQUEST_TYPE.CUSTOM_TIME, title: "Custom Time", canBeSelected: true },
+  { value: REQUEST_TYPE.UNIVERSITY, title: "University", canBeSelected: true },
 ];
 
 

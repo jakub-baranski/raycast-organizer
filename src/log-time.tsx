@@ -9,6 +9,7 @@ import { useLastTimeLogValues } from "./utils/useLastLogValues";
 import { useForm } from "@raycast/utils";
 
 import utc from 'dayjs/plugin/utc';
+import { formatTimeInput } from "./utils/timeFormatting";
 dayjs.extend(utc);
 
 interface LogTimeFormValues {
@@ -138,35 +139,9 @@ export default function LogTimeCommand({ prefillEntry }: LogTimeCommandProps) {
     }
   };
 
-  function formatTimeInput(input: string): string {
-    const val = input.replace(/\D/g, "");
-    if (val.length === 4) {
-      // e.g., 0830 -> 08:30
-      const hour = parseInt(val.slice(0, 2), 10);
-      const minute = parseInt(val.slice(2), 10);
-      if (hour > 23 || minute > 59) return "";
-      return `${val.slice(0, 2)}:${val.slice(2)}`;
-    } else if (val.length === 3) {
-      // e.g., 830 -> 08:30
-      const hour = parseInt(val.slice(0, 1), 10);
-      const minute = parseInt(val.slice(1), 10);
-      if (hour > 23 || minute > 59) return "";
-      return `0${val.slice(0, 1)}:${val.slice(1)}`;
-    } else if (val.length === 2) {
-      // e.g., 18 -> 18:00
-      const hour = parseInt(val, 10);
-      if (hour > 23) return "";
-      return `${val}:00`;
-    } else if (val.length === 1) {
-      // e.g., 8 -> 08:00
-      const hour = parseInt(val, 10);
-      if (hour > 23) return "";
-      return `0${val}:00`;
-    }
-    return "";
-  }
+  
 
-  function hourOnBlur(e: React.ChangeEvent<HTMLInputElement>, field: "startAt" | "finishAt") {
+  function hourOnBlur(e: any, field: "startAt" | "finishAt") {
     const formatted = formatTimeInput(e.target.value);
     setValue(field, formatted);
   }
@@ -201,7 +176,7 @@ export default function LogTimeCommand({ prefillEntry }: LogTimeCommandProps) {
       <Form.TextField {...itemProps.startAt} title="Start" 
         placeholder="e.g., 07:00 or 700"
         info="Time in 24-hour format,"
-onBlur={(e) => { hourOnBlur(e, "startAt") }}
+        onBlur={(e) => { hourOnBlur(e, "startAt") }}
 
       />
       <Form.TextField {...itemProps.finishAt} title="Finish" 

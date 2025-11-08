@@ -27,7 +27,7 @@ export interface EmployeeRequest {
   endTime: string | null;
   requestType: string;
   employee: Employee;
-  breaks: RequestBreak[];
+breaks: RequestBreak[];
   created: string;
   projects: Project[];
   warnings: RequestWarning[];
@@ -145,4 +145,5 @@ export const REQUEST_TYPE = {
   BUSINESS: "BS",
   VACATION_ON_DEMAND: "OD",
   CUSTOM_TIME: "CT",
+  UNIVERSITY: "UW",
 } as const;

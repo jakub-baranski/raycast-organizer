@@ -171,10 +171,18 @@ const { push } = useNavigation();
           const formattedDate = dayjs(date).format("MMMM D, YYYY");
           const totalHours = getTotalHoursForDate(date);
 
+          // If date is today or yesterday, show "Today" or "Yesterday" before the actual date
+          
+          const namedDate = dayjs(date).isSame(dayjs(), "day")
+            ? "Today"
+            : dayjs(date).isSame(dayjs().subtract(1, "day"), "day")
+            ? "Yesterday"
+            : ''  
+
           return (
             <List.Section
               key={date}
-              title={`${dayOfWeek}, ${formattedDate}`}
+              title={`${dayOfWeek}, ${formattedDate} ${namedDate ? `(${namedDate})` : ''}`}
               subtitle={`Total: ${totalHours}`}
             >
               {groupedEntries[date].map((entry) => {
@@ -205,25 +213,25 @@ const { push } = useNavigation();
                           target={<TimeLogDetails entry={entry} project={project} />}
                         />
                         <Action
+                          title="Copy Entry"
+                          icon={Icon.Duplicate}
+                          shortcut={{ modifiers: ["cmd"], key: "c" }}
+                          onAction={async () => {
+                            push(
+                              <LogTimeCommand
+                                prefillEntry={entry}
+
+                              />
+                            )
+                          }}
+                        />  
+                        <Action
                           title="Delete Entry"
                           icon={Icon.Trash}
                           style={Action.Style.Destructive}
                           onAction={() => handleDelete(entry.id!)}
                           shortcut={{ modifiers: ["cmd"], key: "d" }}
                         />
-                          <Action
-                            title="Copy Entry"
-                            icon={Icon.Duplicate}
-                            shortcut={{ modifiers: ["cmd"], key: "c" }}
-                            onAction={async () => {
-                              push(
-                                <LogTimeCommand
-                                  prefillEntry={entry}
-
-                                />
-                              )
-                            }}
-                          />  
                         <Action
                           title="Refresh"
                           icon={Icon.ArrowClockwise}
