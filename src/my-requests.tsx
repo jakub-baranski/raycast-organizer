@@ -14,7 +14,6 @@ export default function MyRequestsCommand() {
   }, []);
 
   async function fetchRequests() {
-    console.log("Fetching requests...");
     setIsLoading(true);
 
     try {

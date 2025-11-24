@@ -23,6 +23,7 @@ interface LogTimeFormValues {
 
 interface LogTimeCommandProps {
   prefillEntry?: Partial<TimeLogEntry>;
+  draftValues?: Partial<LogTimeFormValues>;
 }
 
 export default function LogTimeCommand({ prefillEntry, draftValues }: LogTimeCommandProps) {

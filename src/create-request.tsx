@@ -12,8 +12,8 @@ dayjs.extend(utc);
 
 interface CreateRequestFormValues {
     requestType: string;
-    startDate: Date | null;
-    endDate: Date | null;
+    startDate: Date | undefined;
+    endDate: Date | undefined;
     startTime: string;
     endTime: string;
     breaks: ( RequestBreak & { removeBreak?: boolean } )[];
@@ -86,9 +86,8 @@ export default function CreateRequestCommand() {
 
         await popToRoot();
       } catch (error) {
-        console.log(error);
+          Toast.Style.Failure,
         await showToast({
-          style: Toast.Style.Failure,
           title: "Failed to Create Request",
           message: error instanceof Error ? error.message : ERROR_MESSAGES.UNKNOWN_ERROR,
         });
@@ -167,7 +166,6 @@ export default function CreateRequestCommand() {
             <Form.TextField
               title={`Break Start`}
               { ...itemProps[`breaks.${index}.start` as keyof CreateRequestFormValues] }
-              // id={`breaks.${index}.start`}
               placeholder="HH:MM (e.g., 12:00)"
               info="Time in 24-hour format"
               onBlur={(e) => { hourOnBlur(e, `breaks.${index}.start` as keyof CreateRequestFormValues) }}
@@ -175,7 +173,6 @@ export default function CreateRequestCommand() {
             <Form.TextField
               title={`Break End`}
               { ...itemProps[`breaks.${index}.end` as keyof CreateRequestFormValues] }
-              // id={`breaks.${index}.end`}
               placeholder="HH:MM (e.g., 12:30)"
               info="Time in 24-hour format"
               onBlur={(e) => { hourOnBlur(e, `breaks.${index}.end` as keyof CreateRequestFormValues) }}
