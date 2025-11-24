@@ -12,7 +12,6 @@ export interface Project {
   isCommercial: boolean;
   tags: string[];
   channelId: string | null;
-
 }
 
 export interface EmployeeRequest {
@@ -27,7 +26,7 @@ export interface EmployeeRequest {
   endTime: string | null;
   requestType: string;
   employee: Employee;
-breaks: RequestBreak[];
+  breaks: RequestBreak[];
   created: string;
   projects: Project[];
   warnings: RequestWarning[];
@@ -60,7 +59,7 @@ export interface TimeLogEntry {
   description: string;
   customTaskTitle?: string;
   startAt: string;
-  finishAt: string;  
+  finishAt: string;
   isOvertime: boolean;
   project: number;
 }

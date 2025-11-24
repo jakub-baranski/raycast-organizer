@@ -1,13 +1,13 @@
 import { getPreferenceValues } from "@raycast/api";
 import { AuthService } from "./auth";
-import { 
+import {
   Preferences,
   EmployeeRequest,
   PaginatedResponse,
   LoginResponse,
   CreateRequestData,
   Project,
-  TimeLogEntry 
+  TimeLogEntry,
 } from "../types";
 import { API_ENDPOINTS, HTTP_STATUS, ERROR_MESSAGES } from "../constants";
 
@@ -175,7 +175,7 @@ export class ApiClient {
     return this.request<EmployeeRequest>(API_ENDPOINTS.EMPLOYEE_REQUESTS, {
       method: "POST",
       body: JSON.stringify(data),
-    }); 
+    });
   }
 
   async cancelRequest(requestId: number): Promise<void> {
@@ -189,13 +189,11 @@ export class ApiClient {
   }
 
   async logTime(data: TimeLogEntry): Promise<TimeLogEntry> {
-
     return await this.request<TimeLogEntry>(API_ENDPOINTS.WORKTIME, {
       method: "POST",
       body: JSON.stringify(data),
     });
   }
-
 
   async getTimeLogEntries(startDate: string, endDate: string): Promise<TimeLogEntry[]> {
     const url = `${API_ENDPOINTS.WORKTIME}?start_date=${startDate}&end_date=${endDate}`;
@@ -205,6 +203,13 @@ export class ApiClient {
   async deleteTimeLogEntry(entryId: number): Promise<void> {
     await this.request<void>(API_ENDPOINTS.WORKTIME_ENTRY(entryId), {
       method: "DELETE",
+    });
+  }
+
+  async updateTimeLogEntry(entryId: number, data: TimeLogEntry): Promise<TimeLogEntry> {
+    return await this.request<TimeLogEntry>(API_ENDPOINTS.WORKTIME_ENTRY(entryId), {
+      method: "PUT",
+      body: JSON.stringify(data),
     });
   }
 }

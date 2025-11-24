@@ -12,7 +12,7 @@ describe("AuthService", () => {
   describe("setTokens", () => {
     it("should store all tokens and user data", async () => {
       const userData = { id: 1, email: "test@example.com" };
-      
+
       await AuthService.setTokens(
         "access-token",
         "refresh-token",
@@ -29,18 +29,10 @@ describe("AuthService", () => {
     });
 
     it("should store tokens without user data", async () => {
-      await AuthService.setTokens(
-        "access-token",
-        "refresh-token",
-        "2024-12-31T23:59:59Z",
-        "2025-12-31T23:59:59Z"
-      );
+      await AuthService.setTokens("access-token", "refresh-token", "2024-12-31T23:59:59Z", "2025-12-31T23:59:59Z");
 
       expect(LocalStorage.setItem).toHaveBeenCalledTimes(4);
-      expect(LocalStorage.setItem).not.toHaveBeenCalledWith(
-        STORAGE_KEYS.USER_DATA,
-        expect.anything()
-      );
+      expect(LocalStorage.setItem).not.toHaveBeenCalledWith(STORAGE_KEYS.USER_DATA, expect.anything());
     });
   });
 
@@ -87,9 +79,7 @@ describe("AuthService", () => {
     });
 
     it("should return token if no expiry is set", async () => {
-      (LocalStorage.getItem as jest.Mock)
-        .mockResolvedValueOnce("access-token")
-        .mockResolvedValueOnce(undefined);
+      (LocalStorage.getItem as jest.Mock).mockResolvedValueOnce("access-token").mockResolvedValueOnce(undefined);
 
       const token = await AuthService.getAccessToken();
 

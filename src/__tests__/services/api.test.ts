@@ -235,10 +235,7 @@ describe("ApiClient", () => {
         });
 
       // Make two simultaneous requests
-      const [result1, result2] = await Promise.all([
-        apiClient.getMyRequests(),
-        apiClient.getMyRequests(),
-      ]);
+      const [result1, result2] = await Promise.all([apiClient.getMyRequests(), apiClient.getMyRequests()]);
 
       expect(result1).toEqual(mockRequests);
       expect(result2).toEqual(mockRequests);
@@ -262,6 +259,100 @@ describe("ApiClient", () => {
 
       await expect(apiClient.getMyRequests()).rejects.toThrow(ERROR_MESSAGES.SESSION_EXPIRED);
       expect(AuthService.clearTokens).toHaveBeenCalled();
+    });
+  });
+
+  describe("updateTimeLogEntry", () => {
+    it("should update a time log entry successfully", async () => {
+      const entryId = 123;
+      const updateData = {
+        project: 1,
+        startAt: "2024-01-01T08:00:00Z",
+        finishAt: "2024-01-01T16:00:00Z",
+        isOvertime: false,
+        description: "Updated work",
+      };
+
+      const mockResponse = { id: entryId, ...updateData };
+
+      (AuthService.getAccessToken as jest.Mock).mockResolvedValue("valid-token");
+      (global.fetch as jest.Mock).mockResolvedValue({
+        ok: true,
+        json: async () => mockResponse,
+      });
+
+      const result = await apiClient.updateTimeLogEntry(entryId, updateData);
+
+      expect(result).toEqual(mockResponse);
+      expect(global.fetch).toHaveBeenCalledWith(
+        expect.stringContaining(`/projects/my-worktime/${entryId}/`),
+        expect.objectContaining({
+          method: "PUT",
+          body: JSON.stringify(updateData),
+          headers: expect.objectContaining({
+            Authorization: "Bearer valid-token",
+          }),
+        })
+      );
+    });
+
+    it("should throw error on failed update", async () => {
+      const entryId = 123;
+      const updateData = {
+        project: 1,
+        startAt: "2024-01-01T08:00:00Z",
+        finishAt: "2024-01-01T16:00:00Z",
+        isOvertime: false,
+        description: "Updated work",
+      };
+
+      (AuthService.getAccessToken as jest.Mock).mockResolvedValue("valid-token");
+      (global.fetch as jest.Mock).mockResolvedValue({
+        ok: false,
+        statusText: "Bad Request",
+      });
+
+      await expect(apiClient.updateTimeLogEntry(entryId, updateData)).rejects.toThrow("API Error: Bad Request");
+    });
+
+    it("should refresh token and retry on 401 error during update", async () => {
+      const entryId = 123;
+      const updateData = {
+        project: 1,
+        startAt: "2024-01-01T08:00:00Z",
+        finishAt: "2024-01-01T16:00:00Z",
+        isOvertime: false,
+        description: "Updated work",
+      };
+
+      const mockResponse = { id: entryId, ...updateData };
+
+      (AuthService.getAccessToken as jest.Mock).mockResolvedValue("expired-token");
+      (AuthService.getRefreshToken as jest.Mock).mockResolvedValue("refresh-token");
+
+      (global.fetch as jest.Mock)
+        .mockResolvedValueOnce({
+          ok: false,
+          status: HTTP_STATUS.UNAUTHORIZED,
+        })
+        .mockResolvedValueOnce({
+          ok: true,
+          json: async () => ({
+            access: "new-token",
+            refresh: "new-refresh",
+            accessExpiration: "2024-12-31",
+            refreshExpiration: "2025-12-31",
+          }),
+        })
+        .mockResolvedValueOnce({
+          ok: true,
+          json: async () => mockResponse,
+        });
+
+      const result = await apiClient.updateTimeLogEntry(entryId, updateData);
+
+      expect(result).toEqual(mockResponse);
+      expect(global.fetch).toHaveBeenCalledTimes(3);
     });
   });
 });

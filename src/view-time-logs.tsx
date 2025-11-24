@@ -1,4 +1,15 @@
-import { Action, ActionPanel, List, Icon, Color, confirmAlert, Alert, showToast, Toast, useNavigation } from "@raycast/api";
+import {
+  Action,
+  ActionPanel,
+  List,
+  Icon,
+  Color,
+  confirmAlert,
+  Alert,
+  showToast,
+  Toast,
+  useNavigation,
+} from "@raycast/api";
 import React, { useEffect, useState } from "react";
 import { ApiClient } from "./services/api";
 import { TimeLogEntry, Project } from "./types";
@@ -17,8 +28,7 @@ export default function ViewTimeLogsCommand() {
   const [startDate, setStartDate] = useState<Date>(dayjs().subtract(7, "days").toDate());
   const [endDate, setEndDate] = useState<Date>(new Date());
 
-
-const { push } = useNavigation();
+  const { push } = useNavigation();
 
   const fetchData = async () => {
     setIsLoading(true);
@@ -26,10 +36,7 @@ const { push } = useNavigation();
 
     try {
       const [entriesResponse, projectsResponse] = await Promise.all([
-        apiClient.getTimeLogEntries(
-          dayjs(startDate).format("YYYY-MM-DD"),
-          dayjs(endDate).format("YYYY-MM-DD")
-        ),
+        apiClient.getTimeLogEntries(dayjs(startDate).format("YYYY-MM-DD"), dayjs(endDate).format("YYYY-MM-DD")),
         apiClient.getProjects(),
       ]);
 
@@ -172,17 +179,17 @@ const { push } = useNavigation();
           const totalHours = getTotalHoursForDate(date);
 
           // If date is today or yesterday, show "Today" or "Yesterday" before the actual date
-          
+
           const namedDate = dayjs(date).isSame(dayjs(), "day")
             ? "Today"
             : dayjs(date).isSame(dayjs().subtract(1, "day"), "day")
-            ? "Yesterday"
-            : ''  
+              ? "Yesterday"
+              : "";
 
           return (
             <List.Section
               key={date}
-              title={`${dayOfWeek}, ${formattedDate} ${namedDate ? `(${namedDate})` : ''}`}
+              title={`${dayOfWeek}, ${formattedDate} ${namedDate ? `(${namedDate})` : ""}`}
               subtitle={`Total: ${totalHours}`}
             >
               {groupedEntries[date].map((entry) => {
@@ -212,19 +219,20 @@ const { push } = useNavigation();
                           icon={Icon.Eye}
                           target={<TimeLogDetails entry={entry} project={project} />}
                         />
+                        <Action.Push
+                          title="Edit Entry"
+                          icon={Icon.Pencil}
+                          shortcut={{ modifiers: ["cmd"], key: "e" }}
+                          target={<LogTimeCommand prefillEntry={entry} entryId={entry.id} />}
+                        />
                         <Action
                           title="Copy Entry"
                           icon={Icon.Duplicate}
                           shortcut={{ modifiers: ["cmd"], key: "c" }}
                           onAction={async () => {
-                            push(
-                              <LogTimeCommand
-                                prefillEntry={entry}
-
-                              />
-                            )
+                            push(<LogTimeCommand prefillEntry={entry} />);
                           }}
-                        />  
+                        />
                         <Action
                           title="Delete Entry"
                           icon={Icon.Trash}
@@ -278,11 +286,7 @@ function TimeLogDetails({ entry, project }: { entry: TimeLogEntry; project?: Pro
           ]}
           icon={Icon.Clock}
         />
-        <List.Item
-          title="Duration"
-          accessories={[{ text: `${hours}h ${mins}m` }]}
-          icon={Icon.Hourglass}
-        />
+        <List.Item title="Duration" accessories={[{ text: `${hours}h ${mins}m` }]} icon={Icon.Hourglass} />
         <List.Item
           title="Overtime"
           accessories={[{ text: entry.isOvertime ? "Yes" : "No" }]}

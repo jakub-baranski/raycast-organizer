@@ -33,7 +33,6 @@ export const REQUEST_TYPES = [
   { value: REQUEST_TYPE.UNIVERSITY, title: "University", canBeSelected: true },
 ];
 
-
 export function getStatusLabel(status: string): string {
   const statusLabels: Record<string, string> = {
     [REQUEST_STATUS.ACCEPTED]: "Accepted",

@@ -78,16 +78,9 @@ export default function MyRequestsCommand() {
   }
 
   return (
-    <List 
-      isLoading={isLoading} 
-      searchBarPlaceholder="Search requests..."
-    >
+    <List isLoading={isLoading} searchBarPlaceholder="Search requests...">
       {requests.length === 0 && !isLoading ? (
-        <List.EmptyView 
-          icon={Icon.Document} 
-          title="No Requests Found" 
-          description="You don't have any requests yet" 
-        />
+        <List.EmptyView icon={Icon.Document} title="No Requests Found" description="You don't have any requests yet" />
       ) : (
         requests.map((request) => (
           <List.Item
@@ -96,20 +89,14 @@ export default function MyRequestsCommand() {
             title={formatRequestTitle(request)}
             subtitle={getRequestSubtitle(request)}
             accessories={[
-                { 
-                  icon: request.warnings.length > 0 ? 
-                  {source: Icon.Warning, tintColor: Color.Orange }:
-                  undefined
-                },
-                { text: formatDate(request.created) }, 
-              ]}
+              {
+                icon: request.warnings.length > 0 ? { source: Icon.Warning, tintColor: Color.Orange } : undefined,
+              },
+              { text: formatDate(request.created) },
+            ]}
             actions={
               <ActionPanel>
-                <Action.Push 
-                    title="View Details" 
-                    icon={Icon.Eye} 
-                    target={<RequestDetails request={request} />}
-                  />
+                <Action.Push title="View Details" icon={Icon.Eye} target={<RequestDetails request={request} />} />
                 {request.status === REQUEST_STATUS.PENDING && (
                   <Action
                     title="Cancel Request"
@@ -128,10 +115,8 @@ export default function MyRequestsCommand() {
   );
 }
 
-
 function RequestDetails({ request }: { request: EmployeeRequest }) {
-  const formatWarning = (w: RequestWarning) => 
-  w.project?.trim() ? `${w.warningType} — ${w.project}` : w.warningType;
+  const formatWarning = (w: RequestWarning) => (w.project?.trim() ? `${w.warningType} — ${w.project}` : w.warningType);
 
   return (
     <List>
@@ -149,14 +134,8 @@ function RequestDetails({ request }: { request: EmployeeRequest }) {
       )}
 
       {request.warnings.length > 0 && (
-        <List.Item
-          title="Warnings"
-          subtitle={request.warnings
-            .map(formatWarning)
-            .join("; ")}
-        />
+        <List.Item title="Warnings" subtitle={request.warnings.map(formatWarning).join("; ")} />
       )}
     </List>
   );
 }
-

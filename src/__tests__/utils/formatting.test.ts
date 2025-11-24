@@ -76,11 +76,9 @@ describe("Formatting Utils", () => {
       expect(getRequestTypeLabel(REQUEST_TYPE.VACATION)).toBe("Vacation");
     });
 
-
     it("should return correct label for remote work", () => {
       expect(getRequestTypeLabel(REQUEST_TYPE.REMOTE_WORK)).toBe("Remote Work");
     });
-
 
     it("should return type as-is for unknown type", () => {
       expect(getRequestTypeLabel("UNKNOWN")).toBe("UNKNOWN");
@@ -95,7 +93,6 @@ describe("Formatting Utils", () => {
     it("should return correct icon for remote work", () => {
       expect(getRequestTypeIcon(REQUEST_TYPE.REMOTE_WORK)).toBe("🏠");
     });
-
 
     it("should return default icon for unknown type", () => {
       expect(getRequestTypeIcon("UNKNOWN")).toBe("📝");

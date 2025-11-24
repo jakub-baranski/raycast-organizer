@@ -14,11 +14,10 @@ export default function LoginCommand() {
     async function loadLastUsedEmail() {
       const lastUsedEmail = await LocalStorage.getItem(STORAGE_KEYS.LAST_USED_EMAIL);
       if (lastUsedEmail) {
-        
         // NOTE: Initial render of input element is overriding the default value - so, a timeout
         setTimeout(() => {
-        setUsername(lastUsedEmail.toString());
-        }, 100)
+          setUsername(lastUsedEmail.toString());
+        }, 100);
       }
     }
     loadLastUsedEmail();
