@@ -202,6 +202,7 @@ export default function ViewTimeLogsCommand() {
                   <List.Item
                     key={entry.id}
                     title={project?.name || `Project ${entry.project}`}
+                    keywords={ [ entry.customTaskTitle || "", ...entry.description.split(' ')] }
                     subtitle={entry.description}
                     accessories={[
                       { text: `${startTime} - ${endTime}`, icon: Icon.Clock },
